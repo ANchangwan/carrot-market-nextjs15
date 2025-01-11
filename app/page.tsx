@@ -1,29 +1,22 @@
+import Link from "next/link";
 
 
 export default function Home() {
-  return <main className="bg-gray-300 h-screen flex items-center justify-center p-5">
-    <div className="bg-white shadow-md w-full max-w-[500px] p-5 rounded-xl">
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col">
-          <span className="text-gray-600 font-semibold -mb-1">In transit</span>
-          <span className="text-4xl font-semibold">Coolblue</span>
-        </div>
-        <div className="size-12 rounded-full bg-orange-400"/>
-      </div>
-      <div className="my-2 flex items-center gap-2">
-        <span className="bg-green-400 px-2.5 py-1.5 uppercase text-white font-semibold text-sm rounded-full">Today</span>
-        <span>9:30 - 10:30</span>
-      </div>
-      <div className="relative mb-5">
-        <div className="w-full h-2 bg-gray-200 rounded-full absolute"/>
-        <div className="bg-green-400 h-2 w-2/4  rounded-full absolute"/>
-      </div>
-      <div className="flex justify-between text-gray-600 items-center">
-        <span>Expected</span>
-        <span>Sorting center</span>
-        <span>In Transit</span>
-        <span className="text-gray-400">Delivered</span>
+  return <div className="flex flex-col items-center justify-between min-h-screen p-6">
+    <div className="my-auto flex flex-col items-center gap-2 *:font-medium">
+      <span className="text-9xl">🥕</span>
+      <h1 className="text-4xl">당근</h1>
+      <h2 className="text-2xl">당근 마켓에 어서오세요!</h2>
+    </div >
+    <div className="flex flex-col items-center gap-3 w-full">
+      <Link href="/create-account"
+      className="primary-btn text-lg py-2.5">시작하기</Link>
+      <div className="flex gap-2">
+        <span>이미 계정이 있나요?</span>
+        <Link href="/login"
+        className="hover:underline"
+        >로그인</Link>
       </div>
     </div>
-  </main>
+  </div>
 }
