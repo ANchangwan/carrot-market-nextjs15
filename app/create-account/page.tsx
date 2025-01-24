@@ -1,6 +1,6 @@
 "use client";
-import FormInput from "@/components/form-input";
-import FormBtn from "@/components/form-btn";
+import Input from "@/components/input";
+import Button from "@/components/button";
 import SocialLogin from "@/components/social-login";
 import {useActionState} from "react";
 import {createAccount} from "@/app/create-account/action";
@@ -16,35 +16,40 @@ export default function CreateAccount() {
         <form
             action={dispatch}
             className="flex flex-col gap-3">
-            <FormInput
+            <Input
                 type="text"
                 name="username"
                 placeholder="이름을 입력해주세요..."
                 required
                 errors={state?.fieldErrors.username}
+                minLength={3}
+                maxLength={10}
              />
-            <FormInput
+            <Input
                 type="email"
                 name="email"
                 placeholder="이메일"
                 required
                 errors={state?.fieldErrors.email}
             />
-            <FormInput
+            <Input
                 type="password"
                 name="password"
                 placeholder="password"
                 required
                 errors={state?.fieldErrors.password}
+                minLength={4}
+                maxLength={10}
             />
-            <FormInput
+            <Input
                 type="password"
                 name="confirm_password"
                 placeholder="confirm Password"
                 required
-                errors={state?.fieldErrors.password}
+                errors={state?.fieldErrors.confirm_password}
+                minLength={4}
             />
-            <FormBtn
+            <Button
                 text={"create account"}
             />
         </form>

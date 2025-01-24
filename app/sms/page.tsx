@@ -1,5 +1,5 @@
-import FormInput from "@/components/form-input";
-import FormBtn from "@/components/form-btn";
+import FormInput from "@/components/input";
+import Button from "@/components/button";
 
 export default function CreateAccount() {
     return <div className="flex flex-col gap-10 py-8 px-6">
@@ -26,7 +26,7 @@ export default function CreateAccount() {
                 required
                 errors={[]}
             />
-            <FormBtn
+            <Button
                 loading={false}
                 text={"인증하기"}
             />

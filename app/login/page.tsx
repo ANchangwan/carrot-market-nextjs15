@@ -1,6 +1,6 @@
 "use client";
-import FormInput from "@/components/form-input";
-import FormBtn from "@/components/form-btn";
+import FormInput from "@/components/input";
+import Button from "@/components/button";
 import SocialLogin from "@/components/social-login";
 import {handleForm} from "@/app/login/actions";
 import {useActionState} from "react";
@@ -28,7 +28,7 @@ export default function LogIn() {
                 required
                 errors={state?.errors ?? []}
             />
-            <FormBtn
+            <Button
                 text={"Login"}
             />
         </form>
