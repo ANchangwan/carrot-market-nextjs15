@@ -2,7 +2,6 @@
 import {useFormStatus} from "react-dom";
 
 interface IFormButtonProps {
-
     text: string;
 }
 
