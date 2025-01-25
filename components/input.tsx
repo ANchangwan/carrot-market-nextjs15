@@ -5,7 +5,7 @@ interface IFormInputProps {
     errors?: string[];
 }
 
-export default function Input({name,
+export default function  Input({name,
                                       errors=[],
                                   ...rest
 } : IFormInputProps & InputHTMLAttributes<HTMLInputElement>) {
