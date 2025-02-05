@@ -1,6 +1,7 @@
 "use server";
 import {z} from "zod";
 import {PASSWORD_MIN_LENGTH, PASSWORD_REGEX, PASSWORD_REGEX_ERROR} from "@/lib/constants";
+import db from "@/lib/db";
 
 
 const formSchema = z.object({
@@ -22,10 +23,15 @@ export async function login(prevState:any, formData:FormData) {
     };
 
     const result = formSchema.safeParse(data);
+
     if(!result.success){
         return result.error.flatten();
     }else {
-        console.log(result.data);
+        console.log(result.data.email);
+        // 1. username check
+        // 2. email check
+        // hash password
+        // save the user to db
     }
 
     return {
