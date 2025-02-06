@@ -2,6 +2,10 @@
 import {z} from "zod";
 import {PASSWORD_MIN_LENGTH} from "@/lib/constants";
 import db from "@/lib/db";
+import bcrypt from "bcrypt";
+import {getIronSession} from "iron-session";
+import {cookies} from "next/headers";
+import {redirect} from "next/navigation";
 
 const checkUsername = async (username: string) => {
     const user = await db.user.findUnique({
@@ -46,7 +50,7 @@ const formSchema = z.object({
 });
 
 
-export async function createAccount(prevState:any, formData:FormData){
+export async function createAccount(prevState: any, formData:FormData){
     const data ={
         username:formData.get("username"),
         email:formData.get("email"),
@@ -59,6 +63,28 @@ export async function createAccount(prevState:any, formData:FormData){
    if(!result.success){
        return result.error.flatten()
    }else{
+       const hashedPassword = await bcrypt.hash(result.data.password, 12);
+       const user = await db.user.create({
+           data:{
+               username:result.data.username,
+               email:result.data.email,
+               password:hashedPassword
+           },
+           select:{
+               id:true
+           }
+       })
+       const session = await getIronSession(await cookies(),{
+           cookieName:"delicious-karrot",
+           password:process.env.COOKIE_PASSWORD!,
+       });
+       //@ts-ignore
+       session.id = user.id;
+       await session.save();
+
+       redirect("/");
+       //log the user in
+       // redirect "home"
 
 
 
