@@ -21,7 +21,6 @@ export default function LogIn() {
                 type="email"
                 placeholder="이메일"
                 required
-                // @ts-ignore
                 errors={state?.fieldErrors?.email}
             />
             <FormInput
@@ -29,7 +28,6 @@ export default function LogIn() {
                 type="password"
                 placeholder="password"
                 required
-                //@ts-expect-error
                 errors={state?.fieldErrors?.password}
                 minLength={PASSWORD_MIN_LENGTH}
             />

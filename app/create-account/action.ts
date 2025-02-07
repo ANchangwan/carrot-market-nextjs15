@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import {getIronSession} from "iron-session";
 import {cookies} from "next/headers";
 import {redirect} from "next/navigation";
+import getSession from "@/lib/session";
 
 const checkUsername = async (username: string) => {
     const user = await db.user.findUnique({
@@ -74,17 +75,13 @@ export async function createAccount(prevState: any, formData:FormData){
                id:true
            }
        })
-       const session = await getIronSession(await cookies(),{
-           cookieName:"delicious-karrot",
-           password:process.env.COOKIE_PASSWORD!,
-       });
-       //@ts-ignore
+       const session = await getSession();
+
        session.id = user.id;
        await session.save();
 
        redirect("/");
-       //log the user in
-       // redirect "home"
+
 
 
 
