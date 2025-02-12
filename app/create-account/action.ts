@@ -6,10 +6,6 @@ import bcrypt from "bcrypt";
 import {redirect} from "next/navigation";
 import getSession from "@/lib/session";
 
-
-
-
-
 const confirmPasswordfn = ({password,confirm_password}: {password: string, confirm_password: string}) =>  password === confirm_password ;
 
 // 데이터 조건 설명

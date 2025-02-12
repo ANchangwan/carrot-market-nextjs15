@@ -1,6 +1,6 @@
 "use server";
 import {z} from "zod";
-import {PASSWORD_MIN_LENGTH, PASSWORD_REGEX, PASSWORD_REGEX_ERROR} from "@/lib/constants";
+import {PASSWORD_MIN_LENGTH} from "@/lib/constants";
 import db from "@/lib/db";
 import bcrypt from "bcrypt";
 import getSession from "@/lib/session";
@@ -55,6 +55,7 @@ export async function login(prevState:any, formData:FormData) {
         if(ok){
             const session = await getSession();
             session.id = user!.id;
+            await session.save();
             redirect("/profile");
         }else{
             return {
@@ -66,10 +67,7 @@ export async function login(prevState:any, formData:FormData) {
         }
 
 
-        //log the user in
-        // redirect "/profile"
     }
-
     return {
         errors:["잘못된 비밀번호입니다.","비밀번호가 너무 짧습니다.!"]
     }
