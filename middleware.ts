@@ -10,6 +10,8 @@ const publickOnlyUrls:Routes = {
     "/login":true,
     "/sms":true,
     "/create-account":true,
+    "/github/start":true,
+    "/github/complete":true,
 };
 
 
