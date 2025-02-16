@@ -1,7 +1,7 @@
 import {NextRequest} from "next/server";
 import {notFound} from "next/navigation";
 import {loginSession} from "@/lib/loginSession";
-import {FetchAccessToken, getUserProfile, isNewUser, isUser} from "@/app/github/(hook)/action";
+import {FetchAccessToken, getEmail, getUserProfile, isNewUser, isUser} from "@/app/github/(hook)/action";
 
 export async function GET(request:NextRequest){
     const code = request.nextUrl.searchParams.get("code");
@@ -11,6 +11,7 @@ export async function GET(request:NextRequest){
         client_secret: process.env.GITHUB_CLIENT_SECRET!,
         code,
     }).toString();
+
     const accessTokenURL = `https://github.com/login/oauth/access_token?${accessTokenParams}`;
 
 
@@ -20,11 +21,12 @@ export async function GET(request:NextRequest){
             status: 400,
         });
     }
+
     const {id, avatar_url, login} = await getUserProfile(access_token);
     const user = await isUser(id);
+    const {email} = await getEmail(access_token);
 
-    if(user) await loginSession(user.id);
-
-    const newUser = await isNewUser(login,id,avatar_url);
+    if(user) await loginSession(id);
+    const newUser = await isNewUser(login,id,avatar_url,email);
     await loginSession(newUser.id)
 }

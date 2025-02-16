@@ -21,34 +21,49 @@ export async function getUserProfile(access_token:string) {
 }
 
 export async function getEmail(access_token:string) {
-    return await(await fetch("https://api.github.com/user/emails", {
+    const [email] = await(await fetch("https://api.github.com/user/emails", {
         headers: {
             "Authorization": `Bearer ${access_token}`,
             Accept: "application/json",
         }
     })).json();
+    return email;
 }
 
 export async function isUser(id:number){
-    return db.user.findUnique({
+    return db.socialAccount.findUnique({
         where: {
-            github_id: id + "",
+            provider_provider_id:{
+                provider:"github",
+                provider_id:id.toString()
+            }
         },
         select: {
-            id: true,
+            user:{
+                select:{
+                    id:true
+                }
+            }
         }
     });
 }
 
-export async function isNewUser(username:string,id:number,avatar:string){
+export async function isNewUser(username: string, id: number, avatar: string, email: string) {
+
     return db.user.create({
         data:{
             username,
-            github_id:id.toString(),
+            email,
             avatar,
+            SocialAccount:{
+                create:{
+                    provider:"github",
+                    provider_id:id.toString()
+                }
+            }
         },
-        select:{
-            id:true,
-        }
-    })
+        select: {
+            id: true,
+        },
+    });
 }
