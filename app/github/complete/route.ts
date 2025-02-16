@@ -1,7 +1,7 @@
 import {NextRequest} from "next/server";
-import {notFound, redirect} from "next/navigation";
-import db from "@/lib/db";
-import getSession from "@/lib/session";
+import {notFound} from "next/navigation";
+import {loginSession} from "@/lib/loginSession";
+import {FetchAccessToken, getUserProfile, isNewUser, isUser} from "@/app/github/(hook)/action";
 
 export async function GET(request:NextRequest){
     const code = request.nextUrl.searchParams.get("code");
@@ -12,51 +12,19 @@ export async function GET(request:NextRequest){
         code,
     }).toString();
     const accessTokenURL = `https://github.com/login/oauth/access_token?${accessTokenParams}`;
-    const {error, access_token} = await(await fetch(accessTokenURL,{
-        method: "POST",
-        headers: {
-            Accept: "application/json",
-        }
-    })).json();
+
+
+    const {error, access_token} = await FetchAccessToken(accessTokenURL);
     if(error){
         return new Response(null,{
             status: 400,
         });
     }
-    const userProfileRequest = await fetch("https://api.github.com/user", {
-        headers: {
-            "Authorization": `Bearer ${access_token}`,
-        },
-        cache: "no-cache",
-    });
-    const {id, avatar_url, login} = await userProfileRequest.json();
-    const user = await db.user.findUnique({
-        where:{
-            github_id: id + "",
-        },
-        select:{
-            id:true,
-        }
-    });
-    if(user){
-        const session = await getSession();
-        session.id = user.id;
-        await session.save();
-        redirect("/profile");
-    }
-    const newUser = await db.user.create({
-        data:{
-            username:login,
-            github_id:id + "",
-            avatar:avatar_url
-        },
-        select:{
-            id:true,
-        }
-    })
-    const session = await getSession();
-    session.id = newUser.id;
-    await session.save();
-    redirect("/profile");
-    return redirect("/profile");
+    const {id, avatar_url, login} = await getUserProfile(access_token);
+    const user = await isUser(id);
+
+    if(user) await loginSession(user.id);
+
+    const newUser = await isNewUser(login,id,avatar_url);
+    await loginSession(newUser.id)
 }

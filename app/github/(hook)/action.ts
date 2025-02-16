@@ -1,3 +1,5 @@
+import db from "@/lib/db";
+
 export async function FetchAccessToken(url:string) {
         const response = await fetch(url, {
             method: "POST",
@@ -25,4 +27,28 @@ export async function getEmail(access_token:string) {
             Accept: "application/json",
         }
     })).json();
+}
+
+export async function isUser(id:number){
+    return db.user.findUnique({
+        where: {
+            github_id: id + "",
+        },
+        select: {
+            id: true,
+        }
+    });
+}
+
+export async function isNewUser(username:string,id:number,avatar:string){
+    return db.user.create({
+        data:{
+            username,
+            github_id:id.toString(),
+            avatar,
+        },
+        select:{
+            id:true,
+        }
+    })
 }
