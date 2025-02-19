@@ -27,29 +27,31 @@ export async function getEmail(access_token:string) {
             Accept: "application/json",
         }
     })).json();
+
     return email;
 }
 
-export async function isUser(id:number){
-    return db.socialAccount.findUnique({
-        where: {
-            provider_provider_id:{
-                provider:"github",
-                provider_id:id.toString()
-            }
+export async function isUser(id: number): Promise<{ id: number } | null> {
+    const result = await db.socialAccount.findUnique({
+      where: {
+        provider_provider_id: {
+          provider: "github",
+          provider_id: id.toString(),
         },
-        select: {
-            user:{
-                select:{
-                    id:true
-                }
-            }
-        }
+      },
+      select: {
+        user: {
+          select: {
+            id: true,
+          },
+        },
+      },
     });
-}
+
+    return result?.user || null;
+  }
 
 export async function isNewUser(username: string, id: number, avatar: string, email: string) {
-
     return db.user.create({
         data:{
             username,
@@ -67,3 +69,4 @@ export async function isNewUser(username: string, id: number, avatar: string, em
         },
     });
 }
+

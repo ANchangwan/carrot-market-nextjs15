@@ -1,7 +1,7 @@
 import {NextRequest} from "next/server";
 import {notFound} from "next/navigation";
 import {loginSession} from "@/lib/loginSession";
-import {FetchAccessToken, getEmail, getUserProfile, isNewUser, isUser} from "@/app/github/(hook)/action";
+import {FetchAccessToken, getEmail, getUserProfile, isNewUser, isUser} from "@/app/(auth)/github/action";
 
 export async function GET(request:NextRequest){
     const code = request.nextUrl.searchParams.get("code");
@@ -23,10 +23,11 @@ export async function GET(request:NextRequest){
     }
 
     const {id, avatar_url, login} = await getUserProfile(access_token);
-    const user = await isUser(id);
-    const {email} = await getEmail(access_token);
 
-    if(user) await loginSession(id);
+    const user = await isUser(id);
+    if(user) await loginSession(user.id);
+
+    const {email} = await getEmail(access_token);
     const newUser = await isNewUser(login,id,avatar_url,email);
     await loginSession(newUser.id)
 }

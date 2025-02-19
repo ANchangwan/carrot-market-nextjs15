@@ -8,6 +8,8 @@ export function GET(){
         allow_signup:true
     }
 
+
+    // @ts-ignore
     const formatterParams = new URLSearchParams(params).toString();
     const finalUrl = `${baseUrl}?${formatterParams}`;
 
