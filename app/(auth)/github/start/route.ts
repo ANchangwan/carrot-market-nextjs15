@@ -9,7 +9,6 @@ export function GET(){
     }
 
 
-    // @ts-ignore
     const formatterParams = new URLSearchParams(params).toString();
     const finalUrl = `${baseUrl}?${formatterParams}`;
 

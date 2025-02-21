@@ -27,7 +27,7 @@ const logOut = async () =>{
 
 export default async function profile() {
     const user = await getUser();
-    console.log(user);
+
     return <div>
         <h1>Welcome {user?.username}</h1>
         <form action={logOut}>

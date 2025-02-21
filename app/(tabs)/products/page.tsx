@@ -1,15 +1,33 @@
+import db from "@/lib/db";
+import ListProducts from "@/components/ListProducts";
+import ProductList from "@/components/product-list";
+import { Prisma } from "@prisma/client";
 
 async function getProducts() {
-    return new Promise(resolve => {
-        setTimeout(resolve,10000)
-    })
+  const product = await db.product.findMany({
+    select: {
+      title: true,
+      price: true,
+      created_at: true,
+      photo: true,
+      id: true,
+    },
+    take: 1,
+    orderBy: {
+      created_at: "desc",
+    },
+  });
+  return product;
 }
 
-export default async function Products(){
-    const products = await getProducts();
-    return (
-        <div>
-            <h1 className="text-white text-4xl">Product!</h1>
-        </div>
-    )
+export type InitialProducts = Prisma.PromiseReturnType<typeof getProducts>
+
+export default async function Products() {
+  const initailProducts = await getProducts();
+
+  return (
+    <div>
+      <ProductList initialProducts={initailProducts} />
+    </div>
+  );
 }

@@ -16,6 +16,7 @@ export async function GET(request:NextRequest){
 
 
     const {error, access_token} = await FetchAccessToken(accessTokenURL);
+
     if(error){
         return new Response(null,{
             status: 400,
@@ -25,6 +26,7 @@ export async function GET(request:NextRequest){
     const {id, avatar_url, login} = await getUserProfile(access_token);
 
     const user = await isUser(id);
+
     if(user) await loginSession(user.id);
 
     const {email} = await getEmail(access_token);
